@@ -1,9 +1,13 @@
 name: Build Android Debug APK
 
 on:
-  workflow_dispatch: # Allows you to manually trigger the build from the Actions tab
+  workflow_dispatch:
   push:
-    branches: [ "main" ] # Also triggers automatically if you push code changes
+    branches: [ "main" ]
+
+# Forces the runner to use Node.js 24 for all actions, clearing your warnings
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   build:
@@ -30,4 +34,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Wifi-WPS-Tester-Debug-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        # Fix: Using a wildcard ensures GitHub grabs the APK wherever Gradle puts it
+        path: "**/build/outputs/apk/**/*.apk"
